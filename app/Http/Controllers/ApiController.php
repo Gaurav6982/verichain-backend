@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use JWTAuth;
 use App\Models\User;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class ApiController extends Controller
 {
     public function register(Request $request)
     {
     	//Validate data
-        $data = $request->only('name', 'email', 'password');
+        $data = $request->only('name', 'email','type', 'password');
         $validator = Validator::make($data, [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -31,7 +33,7 @@ class ApiController extends Controller
         	'name' => $request->name,
         	'email' => $request->email,
             'type' => $request->type,
-        	'password' => bcrypt($request->password)
+        	'password' => Hash::make($request->password)
         ]);
 
         //User created, return success response
@@ -116,7 +118,7 @@ class ApiController extends Controller
         ]);
  
         $user = JWTAuth::authenticate($request->token);
- 
+        
         return response()->json(['user' => $user]);
     }
 }
