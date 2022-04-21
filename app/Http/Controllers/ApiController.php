@@ -30,6 +30,7 @@ class ApiController extends Controller
         $user = User::create([
         	'name' => $request->name,
         	'email' => $request->email,
+            'type' => $request->type,
         	'password' => bcrypt($request->password)
         ]);
 
