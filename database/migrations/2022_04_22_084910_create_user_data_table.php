@@ -19,8 +19,8 @@ class CreateUserDataTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('fathers_name')->nullable();
             $table->string('mothers_name')->nullable();
-            $table->enum('gender',['m','f'])->default('m')->nullable();
-            $table->date('dob')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('dob')->nullable();
             $table->string('mobile')->nullable();
             $table->integer('admission_session')->nullable();
             $table->string('institute_code')->nullable();
