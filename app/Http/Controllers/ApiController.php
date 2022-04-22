@@ -46,6 +46,7 @@ class ApiController extends Controller
  
     public function authenticate(Request $request)
     {
+        
         $credentials = $request->only('email', 'password');
 
         //valid credential
@@ -56,7 +57,7 @@ class ApiController extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['success'=>false,'error' => $validator->messages()], 200);
         }
 
         //Request is validated
