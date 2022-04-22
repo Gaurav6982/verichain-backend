@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\UserData;
 class ApiController extends Controller
 {
     public function register(Request $request)
@@ -121,5 +121,30 @@ class ApiController extends Controller
         $user = JWTAuth::authenticate($request->token);
         
         return response()->json(['user' => $user]);
+    }
+
+    public function update_user_data(Request $request){
+        $user = JWTAuth::authenticate($request->token);
+        $user_data = UserData::where('user_id',$user->id)->first();
+
+        if(!$user_data ) $user_data = new UserData;
+        $user_data->user_id = $user->id;
+        $data = $request->except(['_token','token']);
+        $arr= [];
+        foreach($data as $key => $value){
+            $user_data->$key = $value;
+            $arr[]=$key;
+        }
+        // return response()->json($arr,200);
+        if($user_data->save()) return response()->json(['success'=>true],200);
+        else return response()->json(['success'=>false],200);
+
+    }
+
+    public function get_user_data(Request $request){
+        $user = JWTAuth::authenticate($request->token);
+        $user_data = UserData::where('user_id',$user->id)->first();
+        $user_data->email = $user->email;
+        return response()->json($user_data,200);
     }
 }
