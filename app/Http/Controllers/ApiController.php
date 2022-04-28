@@ -130,6 +130,7 @@ class ApiController extends Controller
         if(!$user_data ) $user_data = new UserData;
         $user_data->user_id = $user->id;
         $data = $request->except(['_token','token']);
+        // return response()->json($data,200);
         $arr= [];
         foreach($data as $key => $value){
             $user_data->$key = $value;
@@ -146,5 +147,10 @@ class ApiController extends Controller
         $user_data = UserData::where('user_id',$user->id)->first();
         $user_data->email = $user->email;
         return response()->json($user_data,200);
+    }
+
+    public function fetch_students(){
+        $students = User::where('type','student')->get();
+        return response()->json($students,200);
     }
 }

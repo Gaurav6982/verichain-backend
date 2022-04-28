@@ -34,6 +34,7 @@ class CreateUserDataTable extends Migration
             $table->string('roll_no')->nullable();
             $table->string('semester')->nullable();
             $table->string('branch')->nullable();
+            $table->string('profile_image')->nullable();
             $table->timestamps();
         });
     }
