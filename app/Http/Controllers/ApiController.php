@@ -146,7 +146,7 @@ class ApiController extends Controller
     public function get_user_data(Request $request){
         $user = JWTAuth::authenticate($request->token);
         $user_data = UserData::where('user_id',$user->id)->first();
-        if($user_data)
+        if(!$user_data) $user_data = new \StdClass();
         $user_data->email = $user->email;
         return response()->json($user_data,200);
     }
