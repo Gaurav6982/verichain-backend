@@ -15,8 +15,9 @@ use App\Http\Controllers\ApiController;
 */
 Route::post('login', [ApiController::class, 'authenticate']);
 Route::post('register', [ApiController::class, 'register']);
-Route::get('fetch_students',[ApiController::class,"fetch_students"]);
 Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::get('fetch_students',[ApiController::class,"fetch_students"]);
+    Route::post('upload_profile_image',[ApiController::class,"upload_profile_image"]);
     Route::post('logout', [ApiController::class, 'logout']);
     Route::post('update_user_data', [ApiController::class, 'update_user_data']);
     Route::post('get_user_data', [ApiController::class, 'get_user_data']);

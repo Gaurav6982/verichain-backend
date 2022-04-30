@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\UserData;
+use Storage;
 class ApiController extends Controller
 {
     public function register(Request $request)
@@ -145,6 +146,7 @@ class ApiController extends Controller
     public function get_user_data(Request $request){
         $user = JWTAuth::authenticate($request->token);
         $user_data = UserData::where('user_id',$user->id)->first();
+        if($user_data)
         $user_data->email = $user->email;
         return response()->json($user_data,200);
     }
@@ -152,5 +154,12 @@ class ApiController extends Controller
     public function fetch_students(){
         $students = User::where('type','student')->get();
         return response()->json($students,200);
+    }
+    public function upload_profile_image(Request $request){
+        $path = Storage::putFile('public/profile_images', $request->file('image'));
+        $path_elements = explode('/',$path);
+        $fileName = $path_elements[count($path_elements-1)];
+        // $path = $request->file('image')->store('profile_images');
+        return response()->json(['url' => url('/storage/profile_images/').$fileName ],200);
     }
 }
