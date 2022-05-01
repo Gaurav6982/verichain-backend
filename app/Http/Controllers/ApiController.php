@@ -145,9 +145,11 @@ class ApiController extends Controller
 
     public function get_user_data(Request $request){
         $user = JWTAuth::authenticate($request->token);
+        if(!$user) return reponse()->json(['user not found!'],200);
         $user_data = UserData::where('user_id',$user->id)->first();
         if(!$user_data) $user_data = new \StdClass();
         $user_data->email = $user->email;
+        $user_data->name = $user->name;
         return response()->json($user_data,200);
     }
 
@@ -156,10 +158,17 @@ class ApiController extends Controller
         return response()->json($students,200);
     }
     public function upload_profile_image(Request $request){
+        $user = JWTAuth::authenticate($request->token);
         $path = Storage::putFile('public/profile_images', $request->file('image'));
         $path_elements = explode('/',$path);
-        $fileName = $path_elements[count($path_elements-1)];
+        $fileName = $path_elements[count($path_elements)-1];
+        $image_url = url('/storage/profile_images/').'/'.$fileName;
+        $user_data = UserData::where('user_id',$user->id)->first();
+        if(!$user_data) $user_data = new UserData;
+        $user_data->user_id = $user->id;
+        $user_data->profile_image = $image_url;
+        $user_data->save();
         // $path = $request->file('image')->store('profile_images');
-        return response()->json(['url' => url('/storage/profile_images/').$fileName ],200);
+        return response()->json(['url' => $image_url ],200);
     }
 }
