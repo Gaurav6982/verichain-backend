@@ -175,4 +175,16 @@ class ApiController extends Controller
         // $path = $request->file('image')->store('profile_images');
         return response()->json(['url' => $image_url ],200);
     }
+
+    public function store_document(Request $request){
+        $user = JWTAuth::authenticate($request->token);
+        if(!$user) return response()->json(['user not found']);
+        $doc = new Document;
+        $doc->type = $request->type;
+        $doc->hash = $request->hash;
+        $doc->user_id = $user->id;
+        $doc->save();
+
+        return response()->json(['dcoument saved successfully!']);
+    }
 }
