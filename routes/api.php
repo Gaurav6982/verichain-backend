@@ -18,7 +18,7 @@ Route::post('register', [ApiController::class, 'register']);
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('fetch_students',[ApiController::class,"fetch_students"]);
     Route::post('store_document',[ApiController::class,"store_document"]);
-    Route::post('get_documents/{user_id}',[ApiController::class,"store_document"]);
+    Route::get('get_documents/{user_id}',[ApiController::class,"store_document"]);
     Route::post('upload_profile_image',[ApiController::class,"upload_profile_image"]);
     Route::post('logout', [ApiController::class, 'logout']);
     Route::post('update_user_data', [ApiController::class, 'update_user_data']);
