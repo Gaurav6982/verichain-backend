@@ -159,10 +159,14 @@ class ApiController extends Controller
     }
     public function upload_profile_image(Request $request){
         $user = JWTAuth::authenticate($request->token);
-        $path = Storage::putFile('public/profile_images', $request->file('image'));
-        $path_elements = explode('/',$path);
-        $fileName = $path_elements[count($path_elements)-1];
-        $image_url = url('/storage/profile_images/').'/'.$fileName;
+        // $path = Storage::putFile('public/profile_images', $request->file('image'));
+        
+        $image = $request->file('image');
+        $fileName = $image->getClientOriginalName();
+        $image->move(public_path('/images'),$fileName);
+        // $path_elements = explode('/',$path);
+        // $fileName = $path_elements[count($path_elements)-1];
+        $image_url = url('/images').'/'.$fileName;
         $user_data = UserData::where('user_id',$user->id)->first();
         if(!$user_data) $user_data = new UserData;
         $user_data->user_id = $user->id;
