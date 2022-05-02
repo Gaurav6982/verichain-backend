@@ -48,7 +48,7 @@ class ApiController extends Controller
  
     public function authenticate(Request $request)
     {
-        
+        // return response()->json(['hello']);
         $credentials = $request->only('email', 'password');
 
         //valid credential
@@ -64,21 +64,25 @@ class ApiController extends Controller
 
         //Request is validated
         //Crean token
+        
+        $user = null;
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json([
-                	'success' => false,
+                    'success' => false,
                 	'message' => 'Login credentials are invalid.',
                 ], 400);
             }
+            
         } catch (JWTException $e) {
-    	return $credentials;
+            return response()->json($e);
             return response()->json([
                 	'success' => false,
                 	'message' => 'Could not create token.',
+                    'error' => $e,
                 ], 500);
         }
- 	
+       
  		//Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
@@ -181,12 +185,13 @@ class ApiController extends Controller
         $user = JWTAuth::authenticate($request->token);
         if(!$user) return response()->json(['user not found']);
         $doc = new Document;
+        $doc->name = $request->name;
         $doc->type = $request->type;
         $doc->hash = $request->hash;
         $doc->user_id = $user->id;
         $doc->save();
 
-        return response()->json(['dcoument saved successfully!']);
+        return response()->json(['document saved successfully!']);
     }
     public function get_documents(Request $request,$user_id){
         $docs = Document::where('user_id',$user_id)->get();
