@@ -197,4 +197,30 @@ class ApiController extends Controller
         $docs = Document::where('user_id',$user_id)->get();
         return response()->json($docs);
     }
+    
+    public function verify_document(Request $request, $doc_id){
+        $user = JWTAuth::authenticate($request->get('token'));
+
+        if($user->type != 'institute')
+        return response()->json(['please log in with a institute account!']);
+
+        $doc = Document::find($doc_id);
+        $doc->is_verified = true;
+        $doc->save();
+
+        return response()->json(['Document Verified!']);
+
+    }
+
+    public function delete_document(Request $request, $doc_id){
+        $user = JWTAuth::authenticate($request->get('token'));
+
+        if($user->type != 'institute')
+        return response()->json(['please log in with a institute account!']);
+
+        $doc = Document::find($doc_id);
+        $doc->delete();
+
+        return response()->json(['Document Deleted!']);
+    }
 }

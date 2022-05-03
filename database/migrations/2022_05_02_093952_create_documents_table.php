@@ -17,8 +17,10 @@ class CreateDocumentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('name')->nullable();
             $table->string('type')->nullable();
             $table->string('hash')->nullable();
+            $table->boolean('is_verified')->nullable();
             $table->timestamps();
         });
     }
