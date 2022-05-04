@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\UserData;
 use App\Models\Document;
 use Storage;
+use App\Mail\sendMail;
+use Illuminate\Support\Facades\Mail;
+
 class ApiController extends Controller
 {
     public function register(Request $request)
@@ -236,5 +239,15 @@ class ApiController extends Controller
         $doc->delete();
 
         return response()->json(['Document Deleted!']);
+    }
+
+    public function send_mail(Request $request,$student_id){
+        $user = User::find($student_id);
+        $ins = JWTAuth::authenticate($request->token);
+
+        if(!$ins) return response()->json(['Please log in with a institute Account !!']);
+
+        Mail::to($user->email)->send(new SendMail($request->content));
+        return response()->json(['Mail Sent Successfully!']);
     }
 }
