@@ -212,6 +212,20 @@ class ApiController extends Controller
 
     }
 
+    public function reject_document(Request $request, $doc_id){
+        $user = JWTAuth::authenticate($request->get('token'));
+
+        if($user->type != 'institute')
+        return response()->json(['please log in with a institute account!']);
+
+        $doc = Document::find($doc_id);
+        $doc->is_rejected = true;
+        $doc->save();
+
+        return response()->json(['Document Verified!']);
+
+    }
+
     public function delete_document(Request $request, $doc_id){
         $user = JWTAuth::authenticate($request->get('token'));
 

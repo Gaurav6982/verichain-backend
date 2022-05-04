@@ -20,6 +20,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('store_document',[ApiController::class,"store_document"]);
     Route::get('get_documents/{user_id}',[ApiController::class,"get_documents"]);
     Route::get('verify_document/{doc_id}',[ApiController::class,"verify_document"]);
+    Route::get('reject_document/{doc_id}',[ApiController::class,"reject_document"]);
     Route::get('delete_document/{doc_id}',[ApiController::class,"delete_document"]);
     Route::post('upload_profile_image',[ApiController::class,"upload_profile_image"]);
     Route::post('logout', [ApiController::class, 'logout']);
