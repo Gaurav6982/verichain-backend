@@ -28,4 +28,5 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('get_user_data', [ApiController::class, 'get_user_data']);
     Route::get('get_user', [ApiController::class, 'get_user']);
     Route::post('send_mail/{student_id}', [ApiController::class, 'send_mail']);
+    Route::get('is_registered', [ApiController::class, 'is_registered']);
 });

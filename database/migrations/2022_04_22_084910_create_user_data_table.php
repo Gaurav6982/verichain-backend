@@ -22,7 +22,7 @@ class CreateUserDataTable extends Migration
             $table->string('gender')->nullable();
             $table->string('dob')->nullable();
             $table->string('mobile')->nullable();
-            $table->integer('admission_session')->nullable();
+            $table->string('admission_session')->nullable();
             $table->string('institute_code')->nullable();
             $table->string('institute_name')->nullable();
             $table->string('course_name')->nullable();

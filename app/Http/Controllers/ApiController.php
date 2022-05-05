@@ -89,10 +89,19 @@ class ApiController extends Controller
  		//Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
-            'token' => $token,
+            'token' => $token
         ]);
     }
- 
+    
+    public function is_registered(Request $request){
+        $user = JWTAuth::authenticate($request->token);
+
+        $data = UserData::where('user_id',$user->id)->first();
+
+        $register = true;
+        if(!$data) $register=false;
+        return response()->json(['is_registered' => $register]);
+    }
     public function logout(Request $request)
     {
         //valid credential
@@ -146,7 +155,10 @@ class ApiController extends Controller
             $arr[]=$key;
         }
         // return response()->json($arr,200);
-        if($user_data->save()) return response()->json(['success'=>true],200);
+        if($user_data->save()) {
+            $user_data->email = $user->email;
+            return response()->json(['success'=>true,'data' => $user_data],200);
+        }
         else return response()->json(['success'=>false],200);
 
     }
